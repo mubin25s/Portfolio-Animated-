@@ -1,11 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Particle Trail Cursor
-    const cursorMain = document.createElement('div');
-    const cursorGlow = document.createElement('div');
-    cursorMain.classList.add('cursor-main');
-    cursorGlow.classList.add('cursor-glow');
-    document.body.appendChild(cursorMain);
-    document.body.appendChild(cursorGlow);
+    // Device Detection
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isLowPowerDevice = window.innerWidth < 768; // Simple proxy
+
+    // Particle Trail Cursor - Only create if not touch
+    let cursorMain, cursorGlow;
+    if (!isTouchDevice) {
+        cursorMain = document.createElement('div');
+        cursorGlow = document.createElement('div');
+        cursorMain.classList.add('cursor-main');
+        cursorGlow.classList.add('cursor-glow');
+        document.body.appendChild(cursorMain);
+        document.body.appendChild(cursorGlow);
+    }
 
     let mouseX = 0, mouseY = 0;
     let glowX = 0, glowY = 0;
@@ -37,15 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
         mouseX = e.clientX;
         mouseY = e.clientY;
         
-        // Main cursor follows immediately
-        cursorMain.style.left = mouseX + 'px';
-        cursorMain.style.top = mouseY + 'px';
+        if (!isTouchDevice && cursorMain) {
+            // Main cursor follows immediately
+            cursorMain.style.left = mouseX + 'px';
+            cursorMain.style.top = mouseY + 'px';
 
-        // Create particle trail
-        const currentTime = Date.now();
-        if (currentTime - lastParticleTime > particleInterval) {
-            createParticle(mouseX, mouseY);
-            lastParticleTime = currentTime;
+            // Create particle trail
+            const currentTime = Date.now();
+            if (currentTime - lastParticleTime > particleInterval) {
+                createParticle(mouseX, mouseY);
+                lastParticleTime = currentTime;
+            }
         }
     });
 
@@ -71,12 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Smooth glow animation
     function animateGlow() {
-        // Lerp for smooth trailing glow
-        glowX += (mouseX - glowX) * 0.1;
-        glowY += (mouseY - glowY) * 0.1;
-        
-        cursorGlow.style.left = glowX + 'px';
-        cursorGlow.style.top = glowY + 'px';
+        if (!isTouchDevice && cursorGlow) {
+            // Lerp for smooth trailing glow
+            glowX += (mouseX - glowX) * 0.1;
+            glowY += (mouseY - glowY) * 0.1;
+            
+            cursorGlow.style.left = glowX + 'px';
+            cursorGlow.style.top = glowY + 'px';
+        }
         
         requestAnimationFrame(animateGlow);
     }
@@ -103,13 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hide cursor when leaving window
     document.addEventListener('mouseleave', () => {
-        cursorMain.style.opacity = '0';
-        cursorGlow.style.opacity = '0';
+        if (cursorMain) cursorMain.style.opacity = '0';
+        if (cursorGlow) cursorGlow.style.opacity = '0';
     });
 
     document.addEventListener('mouseenter', () => {
-        cursorMain.style.opacity = '1';
-        cursorGlow.style.opacity = '1';
+        if (cursorMain) cursorMain.style.opacity = '1';
+        if (cursorGlow) cursorGlow.style.opacity = '1';
     });
 
     // Initialize Supabase
@@ -191,8 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const initGradientPoints = () => {
             gradientPoints = [];
-            const cols = 4;
-            const rows = 3;
+            // Optimize grid density based on device performance
+            const cols = isLowPowerDevice ? 3 : 4;
+            const rows = isLowPowerDevice ? 2 : 3;
             const spacingX = width / (cols + 1);
             const spacingY = height / (rows + 1);
 
@@ -287,27 +299,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Magnetic Buttons (New Feature)
     const buttons = document.querySelectorAll('.btn-primary, .btn-secondary, .social-links a');
     buttons.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
+        if (!isTouchDevice) {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                // Magnetic pull strength
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        }
+
+        // Fire Blast Effect on click/touch
+        const handleClick = (e) => {
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
             
-            // Magnetic pull strength
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-        });
-
-        btn.addEventListener('mouseleave', () => {
-            btn.style.transform = 'translate(0, 0)';
-        });
-
-        // Fire Blast Effect on click
-        btn.addEventListener('mousedown', (e) => {
             if (Math.random() > 0.7) {
-                createDragonFire(e.clientX, e.clientY);
+                createDragonFire(clientX, clientY);
             } else {
-                createFireBlast(e.clientX, e.clientY);
+                createFireBlast(clientX, clientY);
             }
-        });
+        };
+
+        btn.addEventListener('mousedown', handleClick);
+        btn.addEventListener('touchstart', handleClick, { passive: true });
     });
 
     // --- HYBRID INFINITE + SWIPEABLE CAROUSEL ---
@@ -507,17 +527,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle tilt for other containers separately with more standard tilt
     const otherContainers = document.querySelectorAll('.interests-container, .contact-form');
     otherContainers.forEach(container => {
-        container.addEventListener('mousemove', (e) => {
-            const rect = container.getBoundingClientRect();
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((e.clientY - rect.top - centerY) / centerY) * -5;
-            const rotateY = ((e.clientX - rect.left - centerX) / centerX) * 5;
-            container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-        container.addEventListener('mouseleave', () => {
-            container.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-        });
+        if (!isTouchDevice) {
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((e.clientY - rect.top - centerY) / centerY) * -5;
+                const rotateY = ((e.clientX - rect.left - centerX) / centerX) * 5;
+                container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            container.addEventListener('mouseleave', () => {
+                container.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        }
     });
 
     // 5. Loop-Style Scroll & Marquee Reveal
