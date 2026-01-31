@@ -16,18 +16,49 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastParticleTime = 0;
     const particleInterval = 30; // milliseconds between particles
 
-    // 0. Theme Toggle Logic (Cosmic Shift)
+    // 0. Character & Theme Switcher Logic
     const profilePic = document.querySelector('.profile-pic');
-    const currentTheme = localStorage.getItem('theme') || 'light';
+    const charSwitcher = document.getElementById('character-switcher');
+    const switchBtns = document.querySelectorAll('.switch-btn');
+    
+    // Initial Setup
+    const currentCharacter = localStorage.getItem('character') || 'goku';
+    const currentTheme = localStorage.getItem('theme') || 'dark';
 
-    if (currentTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-    }
+    document.documentElement.setAttribute('data-character', currentCharacter);
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    // Update active button in switcher
+    switchBtns.forEach(btn => {
+        if (btn.getAttribute('data-char') === currentCharacter) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Character Switch Event
+    switchBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const char = btn.getAttribute('data-char');
+            document.documentElement.setAttribute('data-character', char);
+            localStorage.setItem('character', char);
+            
+            // Update UI
+            switchBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Trigger character specific setup
+            if (char === 'panda') {
+                startPandaAnimations();
+            } else {
+                stopPandaAnimations();
+            }
+        });
+    });
 
     if (profilePic) {
-        profilePic.style.cursor = 'pointer'; // Ensure it looks clickable
+        profilePic.style.cursor = 'pointer';
         profilePic.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme');
             if (theme === 'light') {
@@ -39,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
     window.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
@@ -63,6 +95,17 @@ document.addEventListener('DOMContentLoaded', () => {
         particle.classList.add('cursor-particle');
         particle.style.left = x + 'px';
         particle.style.top = y + 'px';
+        
+        // Character specific colors
+        const char = document.documentElement.getAttribute('data-character');
+        if (char === 'panda') {
+            const colors = ['#00a86b', '#ffd700', '#2e8b57'];
+            particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]} 0%, transparent 70%)`;
+            particle.style.boxShadow = `0 0 8px rgba(0, 168, 107, 0.4), 0 0 15px rgba(255, 215, 0, 0.3)`;
+        } else {
+            particle.style.background = `radial-gradient(circle, var(--accent-color) 0%, transparent 70%)`;
+            particle.style.boxShadow = `0 0 8px rgba(0, 242, 255, 0.4), 0 0 15px rgba(0, 242, 255, 0.3)`;
+        }
         
         // Random size variation
         const size = Math.random() * 4 + 4; // 4-8px
@@ -156,12 +199,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.radius = Math.random() * 200 + 150;
                 this.speed = Math.random() * 0.0005 + 0.0002;
                 this.angle = Math.random() * Math.PI * 2;
-                this.color = index % 2 === 0 ? 
-                    { r: 0, g: 229, b: 255, a: 0.1 } : // UI Cyan
-                    { r: 224, g: 250, b: 255, a: 0.1 };  // UI Silver/White
+                this.updateColors();
+            }
+
+            updateColors() {
+                const char = document.documentElement.getAttribute('data-character');
+                if (char === 'panda') {
+                    this.color = this.index % 2 === 0 ? 
+                        { r: 0, g: 168, b: 107, a: 0.15 } : // Jade Green
+                        { r: 255, g: 215, b: 0, a: 0.1 };   // Gold
+                } else {
+                    this.color = this.index % 2 === 0 ? 
+                        { r: 0, g: 229, b: 255, a: 0.1 } : // UI Cyan
+                        { r: 224, g: 250, b: 255, a: 0.1 };  // UI Silver/White
+                }
             }
 
             update() {
+                // Update color dynamically if changed
+                this.updateColors();
                 // Circular motion
                 this.angle += this.speed;
                 const offsetX = Math.cos(this.angle + time * 0.5) * 30;
@@ -318,12 +374,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const clientX = e.clientX || (e.touches && e.touches[0].clientX);
             const clientY = e.clientY || (e.touches && e.touches[0].clientY);
             
-            if (Math.random() > 0.7) {
-                createDragonFire(clientX, clientY);
+            const char = document.documentElement.getAttribute('data-character');
+            if (char === 'panda') {
+                if (Math.random() > 0.7) {
+                    createYinYangBurst(clientX, clientY);
+                } else {
+                    createJadeBlast(clientX, clientY);
+                }
             } else {
-                createFireBlast(clientX, clientY);
+                if (Math.random() > 0.7) {
+                    createDragonFire(clientX, clientY);
+                } else {
+                    createFireBlast(clientX, clientY);
+                }
             }
         };
+
 
         btn.addEventListener('mousedown', handleClick);
         btn.addEventListener('touchstart', handleClick, { passive: true });
@@ -492,6 +558,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         setTimeout(() => blast.remove(), 600);
+    }
+
+    // Panda Effects
+    function createJadeBlast(x, y) {
+        const blast = document.createElement('div');
+        blast.className = 'jade-blast';
+        blast.style.left = x + 'px';
+        blast.style.top = y + 'px';
+        document.body.appendChild(blast);
+
+        // Add jade sparks
+        for (let i = 0; i < 15; i++) {
+            const spark = document.createElement('div');
+            spark.className = 'ki-spark';
+            spark.style.left = x + 'px';
+            spark.style.top = y + 'px';
+            spark.style.background = '#00a86b';
+            spark.style.boxShadow = '0 0 10px #00a86b';
+            
+            const angle = Math.random() * Math.PI * 2;
+            const tx = Math.cos(angle) * 120;
+            const ty = Math.sin(angle) * 120;
+            
+            spark.style.setProperty('--tx', `${tx}px`);
+            spark.style.setProperty('--ty', `${ty}px`);
+            
+            document.body.appendChild(spark);
+            setTimeout(() => spark.remove(), 800);
+        }
+
+        setTimeout(() => blast.remove(), 600);
+    }
+
+    function createYinYangBurst(x, y) {
+        const burst = document.createElement('div');
+        burst.className = 'yin-yang-burst';
+        burst.style.left = x + 'px';
+        burst.style.top = y + 'px';
+        document.body.appendChild(burst);
+        
+        // Minor screenshake for the burst
+        document.body.style.animation = 'shake 0.1s ease-in-out forwards';
+        setTimeout(() => document.body.style.animation = '', 100);
+
+        setTimeout(() => burst.remove(), 800);
     }
 
     // 4. Subtle Professional Card Interaction
@@ -796,7 +907,58 @@ document.addEventListener('DOMContentLoaded', () => {
                     avgContainer.style.opacity = '1';
                 }
             } catch (e) { console.error(e); }
-         })();
+          })();
      }
 
+     // Kung Fu Panda Specific Animations
+     let pandaAnimId = null;
+
+     function startPandaAnimations() {
+         if (pandaAnimId) return;
+         
+         const createPetal = () => {
+             const char = document.documentElement.getAttribute('data-character');
+             if (char !== 'panda') return;
+
+             const petal = document.createElement('div');
+             petal.className = 'cherry-blossom';
+             
+             // Random properties
+             const size = Math.random() * 15 + 10;
+             const left = Math.random() * 100;
+             const duration = Math.random() * 5 + 5;
+             const delay = Math.random() * 5;
+             
+             petal.style.width = `${size}px`;
+             petal.style.height = `${size}px`;
+             petal.style.left = `${left}%`;
+             petal.style.animationDuration = `${duration}s`;
+             petal.style.animationDelay = `${delay}s`;
+             
+             // Variation in color (pink to light jade)
+             const colors = ['#ffd1dc', '#ffb7c5', '#f8c8dc', '#e6fff2'];
+             petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+             
+             document.body.appendChild(petal);
+             
+             setTimeout(() => {
+                 petal.remove();
+             }, (duration + delay) * 1000);
+         };
+
+         pandaAnimId = setInterval(createPetal, 500);
+     }
+
+     function stopPandaAnimations() {
+         if (pandaAnimId) {
+             clearInterval(pandaAnimId);
+             pandaAnimId = null;
+         }
+         document.querySelectorAll('.cherry-blossom').forEach(p => p.remove());
+     }
+
+     // Initialize Panda animations if it's the current mode
+     if (currentCharacter === 'panda') {
+         startPandaAnimations();
+     }
 });

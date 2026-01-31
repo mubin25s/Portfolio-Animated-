@@ -43,6 +43,93 @@
     --bio-hover: #ffffff;
 }
 
+[data-character="panda"] {
+    /* KUNG FU PANDA MODE: Dragon Warrior (Jade & Gold) */
+    --bg-color: #0d1a15;
+    --card-bg: rgba(13, 26, 21, 0.4);
+    --glass-border: rgba(0, 168, 107, 0.3);
+    --text-primary: #ffffff;
+    --text-secondary: #ffd700; /* Imperial Gold */
+    --accent-color: #00a86b; /* Jade Green */
+    --accent-secondary: #ff8c00; /* Dark Orange/Gold */
+    --accent-glow: rgba(0, 168, 107, 0.6);
+    --ki-glow: rgba(255, 215, 0, 0.4);
+    --switch-bg: rgba(0, 168, 107, 0.2);
+    --body-bg-gradient: radial-gradient(circle at center, rgba(0, 168, 107, 0.1), rgba(13, 26, 21, 0.95));
+    --overlay-gradient: radial-gradient(circle at center, rgba(13, 26, 21, 0.3), rgba(13, 26, 21, 0.8));
+    --video-display: none;
+    --image-bg-display: block;
+    --bio-text: #ffd700;
+    --bio-hover: #ffffff;
+    --font-family: 'Inter', sans-serif; /* Cleaner for Panda mode */
+}
+
+/* Character Switcher Styles */
+.character-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+    z-index: 10001;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.switch-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.switch-btn:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.switch-btn.active {
+    background: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.switch-btn[data-char="goku"].active {
+    background: #00f2ff;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.6);
+}
+
+.switch-btn[data-char="panda"].active {
+    background: #00a86b;
+    box-shadow: 0 0 15px rgba(0, 168, 107, 0.6);
+}
+
+/* Toggle visibility of character assets */
+[data-character="goku"] .panda-asset { display: none !important; }
+[data-character="panda"] .goku-asset { display: none !important; }
+[data-character="panda"] #panda-bg {
+    display: block !important;
+    animation: jadePulse 10s infinite alternate;
+}
+
+@keyframes jadePulse {
+    0% { filter: brightness(0.9) contrast(1.1) hue-rotate(0deg); }
+    100% { filter: brightness(1.1) contrast(1.2) hue-rotate(5deg); }
+}
+
+
+
 * {
     margin: 0;
     padding: 0;
@@ -140,6 +227,35 @@ body.cursor-hover .cursor-glow {
     background: radial-gradient(circle, rgba(188, 19, 254, 0.25) 0%, transparent 70%);
 }
 
+/* Panda Mode Specific Animations */
+.cherry-blossom {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9997;
+    background: pink;
+    border-radius: 50% 0 50% 50%;
+    opacity: 0.6;
+    animation: fall 10s linear;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.8; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+[data-character="panda"] .section-title {
+    font-family: 'Bangers', cursive; /* Keeping Bangers for impact, or switch to something more 'kung fu' if available */
+    background: linear-gradient(to bottom, #ffd700, #00a86b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(0, 168, 107, 0.3);
+}
+
+[data-character="panda"] .section-title::after {
+    background: linear-gradient(90deg, #00a86b, #ffd700, #00a86b);
+}
+
+
 /* Shrink state for small elements - Shifts to Purple Precision */
 body.cursor-shrink .cursor-main {
     transform: translate(-50%, -50%) scale(0.6);
@@ -164,14 +280,43 @@ body.cursor-shrink .cursor-glow {
     }
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-primary);
-    font-family: var(--font-family);
-    line-height: 1.6;
-    overflow-x: hidden;
-    position: relative;
+/* Panda specific click effects */
+.jade-blast {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 168, 107, 0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%) scale(0);
+    animation: jadeExpand 0.6s ease-out forwards;
+    box-shadow: 0 0 30px #00a86b;
 }
+
+@keyframes jadeExpand {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+    50% { opacity: 0.4; }
+    100% { transform: translate(-50%, -50%) scale(8); opacity: 0; }
+}
+
+.yin-yang-burst {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ffd700;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%) scale(0);
+    animation: yinYangExpand 0.8s cubic-bezier(0.1, 0.7, 1.0, 0.1) forwards;
+}
+
+@keyframes yinYangExpand {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; border-width: 10px; }
+    100% { transform: translate(-50%, -50%) scale(5) rotate(360deg); opacity: 0; border-width: 1px; }
+}
+
 
 .bg-asset {
     position: fixed;

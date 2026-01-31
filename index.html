@@ -12,11 +12,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
-    <video autoplay muted loop playsinline id="bg-video" class="bg-asset" poster="ui_goku_bg.jpg">
+    <video autoplay muted loop playsinline id="bg-video" class="bg-asset goku-asset" poster="ui_goku_bg.jpg">
         <source src="goku enhanced.mp4" type="video/mp4">
     </video>
-    <img src="ui_goku_bg.jpg" id="bg-image" class="bg-asset" alt="Goku Background">
+    <img src="ui_goku_bg.jpg" id="bg-image" class="bg-asset goku-asset" alt="Goku Background">
+    <img src="kung_fu_panda_bg_1769882224196.png" id="panda-bg" class="bg-asset panda-asset" alt="Kung Fu Panda Background" style="display: none;">
     <canvas id="bg-canvas"></canvas>
+
+    <div class="character-switcher" id="character-switcher">
+        <button class="switch-btn active" data-char="goku" title="Goku Mode">
+            <i class="fa-solid fa-fire"></i>
+        </button>
+        <button class="switch-btn" data-char="panda" title="Kung Fu Panda Mode">
+            <i class="fa-solid fa-yin-yang"></i>
+        </button>
+    </div>
 
     <header class="hero">
         <div class="container hero-container">
