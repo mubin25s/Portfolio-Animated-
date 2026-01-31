@@ -50,12 +50,24 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Trigger character specific setup
             if (char === 'panda') {
+                stopGotAnimations(); stopBBAnimations(); stopWickAnimations();
                 startPandaAnimations();
+            } else if (char === 'got') {
+                stopPandaAnimations(); stopBBAnimations(); stopWickAnimations();
+                startGotAnimations();
+            } else if (char === 'bb') {
+                stopPandaAnimations(); stopGotAnimations(); stopWickAnimations();
+                startBBAnimations();
+            } else if (char === 'wick') {
+                stopPandaAnimations(); stopGotAnimations(); stopBBAnimations();
+                startWickAnimations();
             } else {
-                stopPandaAnimations();
+                stopPandaAnimations(); stopGotAnimations(); stopBBAnimations(); stopWickAnimations();
             }
         });
     });
+
+
 
     if (profilePic) {
         profilePic.style.cursor = 'pointer';
@@ -99,13 +111,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Character specific colors
         const char = document.documentElement.getAttribute('data-character');
         if (char === 'panda') {
-            const colors = ['#00a86b', '#ffd700', '#2e8b57'];
+            const colors = ['#ffd700', '#ffcc00', '#ff8c00', '#ffffff'];
             particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]} 0%, transparent 70%)`;
-            particle.style.boxShadow = `0 0 8px rgba(0, 168, 107, 0.4), 0 0 15px rgba(255, 215, 0, 0.3)`;
+            particle.style.boxShadow = `0 0 8px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.3)`;
+        } else if (char === 'got') {
+            const colors = ['#ff0000', '#8b0000', '#ff4500', '#222222'];
+            particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]} 0%, transparent 70%)`;
+            particle.style.boxShadow = `0 0 8px rgba(139, 0, 0, 0.6), 0 0 15px rgba(255, 69, 0, 0.4)`;
+        } else if (char === 'bb') {
+            const colors = ['#00ff00', '#32cd32', '#00ffff'];
+            particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]} 0%, transparent 70%)`;
+            particle.style.boxShadow = `0 0 8px rgba(0, 255, 0, 0.4), 0 0 15px rgba(0, 255, 255, 0.3)`;
+        } else if (char === 'wick') {
+            const colors = ['#bc13fe', '#d100d1', '#00f2ff'];
+            particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]} 0%, transparent 70%)`;
+            particle.style.boxShadow = `0 0 8px rgba(188, 19, 254, 0.4), 0 0 15px rgba(0, 242, 255, 0.3)`;
         } else {
+
             particle.style.background = `radial-gradient(circle, var(--accent-color) 0%, transparent 70%)`;
             particle.style.boxShadow = `0 0 8px rgba(0, 242, 255, 0.4), 0 0 15px rgba(0, 242, 255, 0.3)`;
         }
+
         
         // Random size variation
         const size = Math.random() * 4 + 4; // 4-8px
@@ -206,8 +232,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const char = document.documentElement.getAttribute('data-character');
                 if (char === 'panda') {
                     this.color = this.index % 2 === 0 ? 
-                        { r: 0, g: 168, b: 107, a: 0.15 } : // Jade Green
-                        { r: 255, g: 215, b: 0, a: 0.1 };   // Gold
+                        { r: 255, g: 215, b: 0, a: 0.15 } : // Gold
+                        { r: 255, g: 140, b: 0, a: 0.1 };   // Amber
+                } else if (char === 'got') {
+                    this.color = this.index % 2 === 0 ? 
+                        { r: 139, g: 0, b: 0, a: 0.15 } : // Blood Red
+                        { r: 40, g: 40, b: 40, a: 0.1 };   // Ash/Dark
+                } else if (char === 'bb') {
+                    this.color = this.index % 2 === 0 ? 
+                        { r: 0, g: 255, b: 0, a: 0.1 } : // Green
+                        { r: 0, g: 255, b: 255, a: 0.1 }; // Cyan
+                } else if (char === 'wick') {
+                    this.color = this.index % 2 === 0 ? 
+                        { r: 188, g: 19, b: 254, a: 0.15 } : // Purple
+                        { r: 0, g: 242, b: 255, a: 0.1 };   // Cyan
                 } else {
                     this.color = this.index % 2 === 0 ? 
                         { r: 0, g: 229, b: 255, a: 0.1 } : // UI Cyan
@@ -381,7 +419,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     createJadeBlast(clientX, clientY);
                 }
+            } else if (char === 'got') {
+                if (Math.random() > 0.7) {
+                    createDragonFire(clientX, clientY, true); // True for intense GOT fire
+                } else {
+                    createFireBlast(clientX, clientY);
+                }
+            } else if (char === 'bb') {
+                createChemicalBurst(clientX, clientY);
+            } else if (char === 'wick') {
+                createNeonSplash(clientX, clientY);
             } else {
+
+
                 if (Math.random() > 0.7) {
                     createDragonFire(clientX, clientY);
                 } else {
@@ -514,15 +564,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dragon Fire Function
-    function createDragonFire(x, y) {
+    function createDragonFire(x, y, isGot = false) {
         const fire = document.createElement('div');
         fire.className = 'dragon-fire';
+        if (isGot) fire.style.filter = 'hue-rotate(-20deg) brightness(1.5)';
         fire.style.left = x + 'px';
         fire.style.top = y + 'px';
         document.body.appendChild(fire);
         
         // Screenshake effect
-        document.body.style.animation = 'shake 0.2s cubic-bezier(.36,.07,.19,.97) both';
+        document.body.style.animation = isGot ? 'shake 0.4s ease-out' : 'shake 0.2s cubic-bezier(.36,.07,.19,.97) both';
+
         setTimeout(() => {
             document.body.style.animation = '';
         }, 200);
@@ -604,6 +656,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => burst.remove(), 800);
     }
+
+    // Breaking Bad Effect
+    function createChemicalBurst(x, y) {
+        for (let i = 0; i < 15; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'ki-spark';
+            bubble.style.left = x + 'px'; bubble.style.top = y + 'px';
+            bubble.style.background = '#00ff00';
+            bubble.style.boxShadow = '0 0 10px #00ff00';
+            bubble.style.borderRadius = '50%';
+            
+            const dx = (Math.random() - 0.5) * 150;
+            const dy = (Math.random() - 0.5) * 150;
+            bubble.style.setProperty('--tx', `${dx}px`);
+            bubble.style.setProperty('--ty', `${dy}px`);
+            
+            document.body.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 800);
+        }
+    }
+
+    // John Wick Effect
+    function createNeonSplash(x, y) {
+        for (let i = 0; i < 15; i++) {
+            const splash = document.createElement('div');
+            splash.className = 'ki-spark';
+            splash.style.left = x + 'px'; splash.style.top = y + 'px';
+            splash.style.background = '#bc13fe';
+            splash.style.boxShadow = '0 0 10px #bc13fe';
+            
+            const dx = (Math.random() - 0.5) * 180;
+            const dy = (Math.random() - 0.5) * 180;
+            splash.style.setProperty('--tx', `${dx}px`);
+            splash.style.setProperty('--ty', `${dy}px`);
+            
+            document.body.appendChild(splash);
+            setTimeout(() => splash.remove(), 800);
+        }
+    }
+
 
     // 4. Subtle Professional Card Interaction
     const cards = document.querySelectorAll('.project-card');
@@ -957,8 +1049,90 @@ document.addEventListener('DOMContentLoaded', () => {
          document.querySelectorAll('.cherry-blossom').forEach(p => p.remove());
      }
 
-     // Initialize Panda animations if it's the current mode
      if (currentCharacter === 'panda') {
          startPandaAnimations();
+     } else if (currentCharacter === 'got') {
+         startGotAnimations();
+     } else if (currentCharacter === 'bb') {
+         startBBAnimations();
+     } else if (currentCharacter === 'wick') {
+         startWickAnimations();
+     }
+
+     // Game of Thrones Specific Animations
+     let gotAnimId = null;
+
+     function startGotAnimations() {
+         if (gotAnimId) return;
+         const createAsh = () => {
+             const char = document.documentElement.getAttribute('data-character');
+             if (char !== 'got') return;
+             const ash = document.createElement('div');
+             ash.className = 'ash-particle';
+             const size = Math.random() * 4 + 2;
+             const left = Math.random() * 100;
+             const duration = Math.random() * 5 + 5;
+             ash.style.width = `${size}px`; ash.style.height = `${size}px`; ash.style.left = `${left}%`;
+             ash.style.animationDuration = `${duration}s`;
+             document.body.appendChild(ash);
+             setTimeout(() => ash.remove(), (duration + 1) * 1000);
+         };
+         gotAnimId = setInterval(createAsh, 200);
+     }
+
+     function stopGotAnimations() {
+         if (gotAnimId) { clearInterval(gotAnimId); gotAnimId = null; }
+         document.querySelectorAll('.ash-particle').forEach(a => a.remove());
+     }
+
+     // Breaking Bad Specific Animations (Bubbles)
+     let bbAnimId = null;
+     function startBBAnimations() {
+         if (bbAnimId) return;
+         const createBubble = () => {
+             const char = document.documentElement.getAttribute('data-character');
+             if (char !== 'bb') return;
+             const bubble = document.createElement('div');
+             bubble.className = 'cherry-blossom'; // Reuse petal logic
+             bubble.style.background = 'rgba(0, 255, 0, 0.3)';
+             bubble.style.borderRadius = '50%';
+             bubble.style.border = '1px solid #00ff00';
+             const size = Math.random() * 20 + 5;
+             const left = Math.random() * 100;
+             const duration = Math.random() * 4 + 4;
+             bubble.style.width = `${size}px`; bubble.style.height = `${size}px`; bubble.style.left = `${left}%`;
+             bubble.style.animationDuration = `${duration}s`;
+             document.body.appendChild(bubble);
+             setTimeout(() => bubble.remove(), (duration + 1) * 1000);
+         };
+         bbAnimId = setInterval(createBubble, 400);
+     }
+     function stopBBAnimations() {
+         if (bbAnimId) { clearInterval(bbAnimId); bbAnimId = null; }
+     }
+
+     // John Wick Specific Animations (Rain)
+     let wickAnimId = null;
+     function startWickAnimations() {
+         if (wickAnimId) return;
+         const createRain = () => {
+             const char = document.documentElement.getAttribute('data-character');
+             if (char !== 'wick') return;
+             const drop = document.createElement('div');
+             drop.className = 'ash-particle'; // Reuse ash logic
+             drop.style.background = '#bc13fe';
+             drop.style.width = '1px'; drop.style.height = '15px';
+             const left = Math.random() * 100;
+             const duration = Math.random() * 1 + 0.5;
+             drop.style.left = `${left}%`; drop.style.animationDuration = `${duration}s`;
+             document.body.appendChild(drop);
+             setTimeout(() => drop.remove(), (duration + 1) * 1000);
+         };
+         wickAnimId = setInterval(createRain, 50);
+     }
+     function stopWickAnimations() {
+         if (wickAnimId) { clearInterval(wickAnimId); wickAnimId = null; }
      }
 });
+
+

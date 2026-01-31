@@ -44,25 +44,91 @@
 }
 
 [data-character="panda"] {
-    /* KUNG FU PANDA MODE: Dragon Warrior (Jade & Gold) */
-    --bg-color: #0d1a15;
-    --card-bg: rgba(13, 26, 21, 0.4);
-    --glass-border: rgba(0, 168, 107, 0.3);
+    /* KUNG FU PANDA MODE: Golden Dragon Warrior */
+    --bg-color: #1a1200;
+    --card-bg: rgba(43, 29, 0, 0.4);
+    --glass-border: rgba(255, 215, 0, 0.3);
     --text-primary: #ffffff;
     --text-secondary: #ffd700; /* Imperial Gold */
-    --accent-color: #00a86b; /* Jade Green */
-    --accent-secondary: #ff8c00; /* Dark Orange/Gold */
-    --accent-glow: rgba(0, 168, 107, 0.6);
-    --ki-glow: rgba(255, 215, 0, 0.4);
-    --switch-bg: rgba(0, 168, 107, 0.2);
-    --body-bg-gradient: radial-gradient(circle at center, rgba(0, 168, 107, 0.1), rgba(13, 26, 21, 0.95));
-    --overlay-gradient: radial-gradient(circle at center, rgba(13, 26, 21, 0.3), rgba(13, 26, 21, 0.8));
+    --accent-color: #ffcc00; /* Vivid Gold */
+    --accent-secondary: #ff8c00; /* Dragon Orange */
+    --accent-glow: rgba(255, 215, 0, 0.6);
+    --ki-glow: rgba(255, 255, 255, 0.4);
+    --switch-bg: rgba(255, 215, 0, 0.2);
+    --body-bg-gradient: radial-gradient(circle at center, rgba(255, 215, 0, 0.15), rgba(26, 18, 0, 0.95));
+    --overlay-gradient: radial-gradient(circle at center, rgba(26, 18, 0, 0.3), rgba(26, 18, 0, 0.8));
     --video-display: none;
     --image-bg-display: block;
     --bio-text: #ffd700;
     --bio-hover: #ffffff;
-    --font-family: 'Inter', sans-serif; /* Cleaner for Panda mode */
+    --font-family: 'Inter', sans-serif;
 }
+
+[data-character="got"] {
+    /* GAME OF THRONES MODE: Fire & Blood */
+    --bg-color: #0a0505;
+    --card-bg: rgba(26, 8, 8, 0.5);
+    --glass-border: rgba(139, 0, 0, 0.3);
+    --text-primary: #ffffff;
+    --text-secondary: #ff4d4d; /* Valyrian Red */
+    --accent-color: #8b0000; /* Blood Red */
+    --accent-secondary: #ffd700; /* Targaryen Gold */
+    --accent-glow: rgba(139, 0, 0, 0.7);
+    --ki-glow: rgba(255, 69, 0, 0.5);
+    --switch-bg: rgba(139, 0, 0, 0.2);
+    --body-bg-gradient: radial-gradient(circle at center, rgba(139, 0, 0, 0.15), rgba(10, 5, 5, 0.95));
+    --overlay-gradient: radial-gradient(circle at center, rgba(10, 5, 5, 0.3), rgba(10, 5, 5, 0.8));
+    --video-display: none;
+    --image-bg-display: block;
+    --bio-text: #ff4d4d;
+    --bio-hover: #ffffff;
+    --font-family: 'Cinzel', serif; /* Medieval style font */
+}
+
+[data-character="bb"] {
+    /* BREAKING BAD MODE: Chemistry & Crystal */
+    --bg-color: #050a05;
+    --card-bg: rgba(5, 20, 5, 0.45);
+    --glass-border: rgba(0, 255, 0, 0.2);
+    --text-primary: #ffffff;
+    --text-secondary: #00ff00; /* Toxic Green */
+    --accent-color: #32cd32; /* Lime Green */
+    --accent-secondary: #00ffff; /* Meth Blue */
+    --accent-glow: rgba(0, 255, 0, 0.5);
+    --ki-glow: rgba(0, 255, 255, 0.3);
+    --switch-bg: rgba(0, 255, 0, 0.15);
+    --body-bg-gradient: radial-gradient(circle at center, rgba(0, 255, 0, 0.1), rgba(5, 10, 5, 0.95));
+    --overlay-gradient: radial-gradient(circle at center, rgba(5, 10, 5, 0.3), rgba(5, 10, 5, 0.8));
+    --video-display: none;
+    --image-bg-display: block;
+    --bio-text: #00ff00;
+    --bio-hover: #ffffff;
+    --font-family: 'Inter', sans-serif;
+}
+
+[data-character="wick"] {
+    /* JOHN WICK MODE: Continental Purple */
+    --bg-color: #0a000a;
+    --card-bg: rgba(20, 0, 30, 0.5);
+    --glass-border: rgba(188, 19, 254, 0.3);
+    --text-primary: #ffffff;
+    --text-secondary: #bc13fe; /* Neon Purple */
+    --accent-color: #d100d1; /* Magenta */
+    --accent-secondary: #00f2ff; /* Cyan Accents */
+    --accent-glow: rgba(188, 19, 254, 0.6);
+    --ki-glow: rgba(0, 242, 255, 0.4);
+    --switch-bg: rgba(188, 19, 254, 0.2);
+    --body-bg-gradient: radial-gradient(circle at center, rgba(188, 19, 254, 0.1), rgba(10, 0, 10, 0.95));
+    --overlay-gradient: radial-gradient(circle at center, rgba(10, 0, 10, 0.3), rgba(10, 0, 10, 0.8));
+    --video-display: none;
+    --image-bg-display: block;
+    --bio-text: #bc13fe;
+    --bio-hover: #ffffff;
+    --font-family: 'Inter', sans-serif;
+}
+
+
+
 
 /* Character Switcher Styles */
 .character-switcher {
@@ -110,23 +176,107 @@
     box-shadow: 0 0 15px rgba(0, 242, 255, 0.6);
 }
 
-.switch-btn[data-char="panda"].active {
-    background: #00a86b;
-    box-shadow: 0 0 15px rgba(0, 168, 107, 0.6);
+.switch-btn[data-char="got"].active {
+    background: #8b0000;
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.8);
+    color: #fff;
+}
+
+.switch-btn[data-char="bb"].active {
+    background: #32cd32;
+    box-shadow: 0 0 20px rgba(50, 205, 50, 0.8);
+    color: #000;
+}
+
+.switch-btn[data-char="wick"].active {
+    background: #bc13fe;
+    box-shadow: 0 0 20px rgba(188, 19, 254, 0.8);
+    color: #fff;
 }
 
 /* Toggle visibility of character assets */
-[data-character="goku"] .panda-asset { display: none !important; }
-[data-character="panda"] .goku-asset { display: none !important; }
+[data-character="goku"] .panda-asset, [data-character="goku"] .got-asset, [data-character="goku"] .bb-asset, [data-character="goku"] .wick-asset { display: none !important; }
+[data-character="panda"] .goku-asset, [data-character="panda"] .got-asset, [data-character="panda"] .bb-asset, [data-character="panda"] .wick-asset { display: none !important; }
+[data-character="got"] .goku-asset, [data-character="got"] .panda-asset, [data-character="got"] .bb-asset, [data-character="got"] .wick-asset { display: none !important; }
+[data-character="bb"] .goku-asset, [data-character="bb"] .panda-asset, [data-character="bb"] .got-asset, [data-character="bb"] .wick-asset { display: none !important; }
+[data-character="wick"] .goku-asset, [data-character="wick"] .panda-asset, [data-character="wick"] .got-asset, [data-character="wick"] .bb-asset { display: none !important; }
+
+
 [data-character="panda"] #panda-bg {
     display: block !important;
-    animation: jadePulse 10s infinite alternate;
+    transform: scale(1.25); /* Base zoom to hide black bars */
+    animation: dragonPulse 8s infinite alternate ease-in-out;
 }
 
-@keyframes jadePulse {
-    0% { filter: brightness(0.9) contrast(1.1) hue-rotate(0deg); }
-    100% { filter: brightness(1.1) contrast(1.2) hue-rotate(5deg); }
+[data-character="got"] #got-bg {
+    display: block !important;
+    animation: fireBreath 10s infinite alternate ease-in-out;
 }
+
+[data-character="bb"] #bb-bg {
+    display: block !important;
+    animation: chemicalGlow 8s infinite alternate ease-in-out;
+}
+
+[data-character="wick"] #wick-bg {
+    display: block !important;
+    animation: neonRain 10s infinite alternate ease-in-out;
+}
+
+@keyframes chemicalGlow {
+    0% { filter: brightness(0.9) contrast(1.1) hue-rotate(0deg); transform: scale(1.0); }
+    100% { filter: brightness(1.2) contrast(1.3) hue-rotate(10deg); transform: scale(1.05); }
+}
+
+@keyframes neonRain {
+    0% { filter: brightness(1.0) contrast(1.1); transform: scale(1.0) translateY(0); }
+    100% { filter: brightness(1.3) contrast(1.2); transform: scale(1.05) translateY(-5px); }
+}
+
+
+@keyframes fireBreath {
+    0% { filter: brightness(0.8) contrast(1.1); transform: scale(1.0); }
+    100% { filter: brightness(1.2) contrast(1.4) saturate(1.5); transform: scale(1.1); }
+}
+
+
+@keyframes dragonPulse {
+    0% { filter: brightness(1.0) contrast(1.1); transform: scale(1.25); }
+    100% { filter: brightness(1.3) contrast(1.3); transform: scale(1.35); }
+}
+
+/* Dragon Ash Animation */
+.ash-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9997;
+    background: rgba(40, 40, 40, 0.8);
+    border-radius: 2px;
+    opacity: 0.6;
+    animation: drift 8s linear;
+}
+
+@keyframes drift {
+    0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(110vh) translateX(50px) rotate(360deg); opacity: 0; }
+}
+
+[data-character="got"] .section-title {
+    font-family: 'Cinzel', serif;
+    background: linear-gradient(to bottom, #ff4d4d, #8b0000);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
+}
+
+[data-character="got"] .section-title::after {
+    background: linear-gradient(90deg, #8b0000, #ff4d4d, #8b0000);
+}
+
+
+
 
 
 
@@ -285,14 +435,15 @@ body.cursor-shrink .cursor-glow {
     position: fixed;
     width: 20px;
     height: 20px;
-    background: rgba(0, 168, 107, 0.8);
+    background: rgba(255, 215, 0, 0.8);
     border-radius: 50%;
     pointer-events: none;
     z-index: 10000;
     transform: translate(-50%, -50%) scale(0);
     animation: jadeExpand 0.6s ease-out forwards;
-    box-shadow: 0 0 30px #00a86b;
+    box-shadow: 0 0 30px #ffd700;
 }
+
 
 @keyframes jadeExpand {
     0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }

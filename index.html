@@ -6,7 +6,7 @@
     <title>My Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bangers&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bangers&family=Inter:wght@300;400;600;700&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,14 +17,26 @@
     </video>
     <img src="ui_goku_bg.jpg" id="bg-image" class="bg-asset goku-asset" alt="Goku Background">
     <img src="panda_bg_uploaded.jpg" id="panda-bg" class="bg-asset panda-asset" alt="Kung Fu Panda Background" style="display: none;">
+    <img src="got_dragon_bg.png" id="got-bg" class="bg-asset got-asset" alt="Game of Thrones Dragon Background" style="display: none;">
+    <img src="breaking_bad_bg.png" id="bb-bg" class="bg-asset bb-asset" alt="Breaking Bad Background" style="display: none;">
+    <img src="john_wick_bg.png" id="wick-bg" class="bg-asset wick-asset" alt="John Wick Background" style="display: none;">
     <canvas id="bg-canvas"></canvas>
 
     <div class="character-switcher" id="character-switcher">
         <button class="switch-btn active" data-char="goku" title="Goku Mode">
-            <i class="fa-solid fa-fire"></i>
+            <i class="fa-solid fa-fire-flame-curved"></i>
         </button>
         <button class="switch-btn" data-char="panda" title="Kung Fu Panda Mode">
             <i class="fa-solid fa-yin-yang"></i>
+        </button>
+        <button class="switch-btn" data-char="got" title="Game of Thrones Mode">
+            <i class="fa-solid fa-dragon"></i>
+        </button>
+        <button class="switch-btn" data-char="bb" title="Breaking Bad Mode">
+            <i class="fa-solid fa-flask"></i>
+        </button>
+        <button class="switch-btn" data-char="wick" title="John Wick Mode">
+            <i class="fa-solid fa-person-rifle"></i>
         </button>
     </div>
 
