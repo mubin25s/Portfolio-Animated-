@@ -3,7 +3,7 @@
 **Portfolio-Goku** is a modern personal portfolio website designed to showcase skills, projects, and professional profiles. It features a clean UI, interactive sections, and responsive design — ideal for presenting yourself to clients, recruiters, and collaborators.
 
 🔗 **View Portfolio:**  
-👉 https://mubin25s.github.io/Portfolio-Goku/
+👉 https://mubin25s.github.io/Portfolio-Animated-/
 
 ---
 
