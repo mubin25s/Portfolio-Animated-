@@ -78,9 +78,6 @@ This portfolio is deployed using **GitHub Pages**, offering:
 - Fast performance
 - Easy maintenance and updates
 
-Live demo available here:  
-👉 https://mubin25s.github.io/Portfolio-Goku/
-
 ---
 
 ## 🌟 Future Enhancements
